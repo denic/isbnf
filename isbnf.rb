@@ -5,10 +5,9 @@ require "uri"
 require 'nokogiri'
 
 if ARGV[0]
-  file = File.new(ARGV[0])
+  file = ARGV[0]
   isbn = ARGV[0].match('^\d*')[0]
-  
-  puts "Requesting information for ISBN: ${isbn}"
+  puts 'Requesting information for ISBN:' + isbn
 else
   isbn = '3836215012'
 end
@@ -47,5 +46,16 @@ doc.xpath('//dc:date').each do |date|
   i +=1
 end
 
+t += File.extname(file)
 
-puts t
+puts 'rename file to ' + t + '?(y/N)'
+q = STDIN.gets
+q.chop!
+
+# TODO add command line parameter for non interactive mode
+if q  == 'y'
+  File.rename(file, t)
+  puts 'done'
+else
+  puts 'nope'
+end
